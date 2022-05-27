@@ -14,7 +14,7 @@ const char brand[] = "MDtronix";
 /*------------API setting--------------------*/
 #define HA_INIT false // if using with home assistant
 #if HA_INIT
-#define BROKER_ADDR IPAddress(192, 168, 1, 7) home assistant IP
+#define BROKER_ADDR IPAddress(192, 168, 1, 6) // home assistant IP
 #endif
 /*-------------------------------------------*/
 
