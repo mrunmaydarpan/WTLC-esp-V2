@@ -1,4 +1,3 @@
-
 #include <setting.h>
 #include <includes.h>
 
@@ -170,55 +169,6 @@ void setup()
 #if HA_INIT
   set_device();
   mqtt_HA.begin(BROKER_ADDR, BROKER_USER, BROKER_PASS);
-// #else
-// PUMP_DASH.attachCallback([&](bool value)
-//                          {
-//                            if (value == true)
-//                            {
-//                               ManualOff = false;
-//                               DryRunState = false;
-//                               errorCountState = false;
-//                               EEPROM.write(manualOff_mem, 0);
-//                               EEPROM.commit();
-//                               PumpON_command();
-//                               if (AutoMode == false && modeButton.isPressed())
-//                               {
-//                                   AutoMode = true;
-//                                   EEPROM.write(AutoMode_mem,AutoMode);
-//                                   EEPROM.commit();
-//                               }
-//                            }
-//                            else
-//                            {
-//                              if (value >= MotorStartThreshold)
-//                              {
-//                                ManualOff = false;
-//                                EEPROM.write(manualOff_mem, 0);
-//                                EEPROM.commit();
-//                              }
-//                              else
-//                              {
-//                                ManualOff = true;
-//                                AutoMode = false;
-//                                EEPROM.write(manualOff_mem, 1);
-//                                EEPROM.commit();
-//                              }
-//                            PumpOFF_command();
-//                            } });
-// MODE_DASH.attachCallback([&](bool value)
-//                          {
-//                            if(value==true)
-//                            {
-//                              AutoMode=true;
-//                            }
-//                            else
-//                            {
-//                              AutoMode=false;
-//                            }
-//                            EEPROM.write(AutoMode_mem,AutoMode);
-//                            EEPROM.commit();
-//                            MODE_DASH.update(AutoMode);
-//                            dashboard.sendUpdates(); });
 #endif
   setting_code();
 }

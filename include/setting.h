@@ -10,9 +10,8 @@ const char brand[] = "MDtronix";
 /*------------wifi setting-------------------*/
 #define AP_MODE true // AP Mode
 #define WM_SET true  // wifimanager
-
 /*------------API setting--------------------*/
-#define HA_INIT false // if using with home assistant
+#define HA_INIT true // if using with home assistant
 #if HA_INIT
 #define BROKER_ADDR IPAddress(192, 168, 1, 6) // home assistant IP
 #endif
@@ -20,7 +19,7 @@ const char brand[] = "MDtronix";
 
 #define SW_TEST true
 #define OLED true // use OLED display
-#define DryRun
+// #define DryRun
 #define debugData false
 #define Buzzer true
 #define relayPin_inverted false
