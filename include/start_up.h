@@ -31,7 +31,7 @@ void StartUp()
     display.print("MODE:");
     display.setCursor(122, 32);
     display.print(STATOR_TYPE);
-    display.drawRect(0, 0, 128, 16, 1);
+    // display.drawRect(0, 0, 128, 16, 1);
     display.drawBitmap(4, 16, mdtronix_icon, 63, 48, 1);
     display.setCursor(79, 55);
     display.print("MDtronix");

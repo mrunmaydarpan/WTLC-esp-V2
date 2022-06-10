@@ -64,6 +64,10 @@ void buttonEvent()
             EEPROM.commit();
         }
     }
+    else if (button.pressedFor(10000))
+    {
+
+    }
 
     /*-----------------------MODE BUTTON OPERATION------------------------*/
     if (modeButton.wasPressed())
@@ -209,12 +213,12 @@ void update_lcd()
     display.setTextSize(1);
     display.setCursor(4, 4);
     display.print(AutoMode ? "AUTO" : "MANUAL");
-    display.drawRect(0, 0, 128, 16, 1);
-    display.drawLine(43, 0, 43, 15, 1);
-    display.drawLine(72, 0, 72, 15, 1);
-    display.setCursor(50, 4);
-    display.setTextSize(1);
-    display.print(MotorState ? "ON" : "OFF");
+    // display.drawRect(0, 0, 128, 16, 1);
+    // display.drawLine(43, 0, 43, 15, 1);
+    // display.drawLine(72, 0, 72, 15, 1);
+    // display.setCursor(50, 4);
+    // display.setTextSize(1);
+    // display.print(MotorState ? "ON" : "OFF");
     if (MQTT)
         display.drawBitmap(112, 2, network_icon, 12, 12, 1);
     display.display();
