@@ -1,4 +1,4 @@
-#include <setting.h>
+// #include <setting.h>
 #include <includes.h>
 
 #define motorState_mem 1
@@ -225,7 +225,7 @@ void loop()
 //     LEVEL_DASH.update("Error");
 //   dashboard.sendUpdates();
 #endif
-#if WM_SET
+#ifdef WM_SET
   wm.process();
 #endif
   MDNS.update();

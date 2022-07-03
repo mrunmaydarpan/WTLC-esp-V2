@@ -1,5 +1,5 @@
-#define _Mode 3 // RX
-#define PB 0    // D3
+#define _Mode 0 // RX
+#define PB 3    // D3
 #define led 16  // D0
 #define buzz 2  // D4
 /*............Relays ................*/

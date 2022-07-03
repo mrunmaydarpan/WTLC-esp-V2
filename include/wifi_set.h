@@ -36,7 +36,11 @@ String processor(const String &var)
 
 void WIFI_CONNECT()
 {
-#if WM_SET || ESP_CON
+    if (digitalRead(PB) == LOW)
+    {
+        wm.startWebPortal();
+    }
+#ifdef WM_SET
 #if OLED
     display.clearDisplay();
     display.setTextColor(WHITE);
@@ -54,7 +58,7 @@ void WIFI_CONNECT()
     lcd.print("connecting WiFi");
 #endif
 #endif
-#if WM_SET
+#ifdef WM_SET
     WiFi.mode(WIFI_AP_STA);
     // wm.resetSettings(); // wipe settings
     wm.setConfigPortalBlocking(false);
@@ -89,30 +93,6 @@ void WIFI_CONNECT()
 #else
     lcd.clear();
 #endif
-#elif ESP_CON
-    // ESPConnect.erase();  //in case to erase setting
-    ESPConnect.autoConnect("MDtronix-WTLC-setup");
-    if (ESPConnect.begin(&server))
-    {
-#if OLED
-#else
-        lcd.clear();
-        lcd.print("Connected");
-        lcd.setCursor(0, 1);
-        lcd.print(WiFi.localIP());
-#endif
-        Serial.println("Connected to WiFi");
-        Serial.println("IPAddress: " + WiFi.localIP().toString());
-        delay(1000);
-    }
-    else
-    {
-        Serial.println("Failed to connect to WiFi");
-    }
-#if OLED
-#else
-    lcd.clear();
-#endif
 #endif
 }
 
@@ -121,8 +101,8 @@ void setting_code()
 #if AP_MODE
     WiFi.softAP("MDtronix-WTLC");
 #endif
-    server.onNotFound([](AsyncWebServerRequest *request)
-                      { 
+    server.on("/data", HTTP_GET, [](AsyncWebServerRequest *request)
+              { 
                           StaticJsonDocument<200> doc;
                           doc["level"] = value;
                           doc["pump"] = MotorState;
@@ -237,5 +217,4 @@ void set_device()
     mode_HA.setIcon("mdi:nintendo-switch");
     sensor_error_HA.setName(SensorError_name);
 }
-
 #endif
