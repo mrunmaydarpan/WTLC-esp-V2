@@ -23,4 +23,8 @@ void setup()
 
 void loop()
 {
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 2c8241d4d37bbdc1c8e8d88f7cef1279c48bf257
