@@ -20,11 +20,10 @@
 
 #define SW_TEST true
 #define OLED true // use OLED display
-// #define DryRun
+// #define DryRun //dryrun feature
 #define debugData false
 #define Buzzer true
-#define relayPin_inverted false
-// #define web_setting
+// #define web_setting //use this to control without phone
 
 #define on_delay 500
 #define off_delay 1000
