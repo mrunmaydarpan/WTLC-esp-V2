@@ -5,7 +5,7 @@
 #define WM_ASYNC
 #include "AsyncWiFiManager.h" // https://github.com/lbussy/AsyncWiFiManager
 
-//for LED status
+// for LED status
 #include <Ticker.h>
 Ticker ticker;
 
@@ -15,13 +15,15 @@ Ticker ticker;
 
 int LED = LED_BUILTIN;
 
-void tick() {
+void tick()
+{
     // Toggle state
     digitalWrite(LED, !digitalRead(LED)); // set pin to the opposite state
 }
 
 // Gets called when AsyncWiFiManager enters configuration mode
-void configModeCallback(AsyncWiFiManager *myAsyncWiFiManager) {
+void configModeCallback(AsyncWiFiManager *myAsyncWiFiManager)
+{
     Serial.println("Entered config mode");
     Serial.println(WiFi.softAPIP());
     // If you used auto generated SSID, print it
@@ -30,7 +32,8 @@ void configModeCallback(AsyncWiFiManager *myAsyncWiFiManager) {
     ticker.attach(0.2, tick);
 }
 
-void setup() {
+void setup()
+{
     // Put your setup code here, to run once:
     WiFi.mode(WIFI_STA); // Explicitly set mode, esp defaults to STA+AP
     Serial.begin(115200);
@@ -53,7 +56,8 @@ void setup() {
     // Fetches ssid and pass and tries to connect. If it does not connect it
     // starts an access point with the specified name, here "AutoConnectAP,"
     // and goes into a blocking loop awaiting configuration.
-    if (!wm.autoConnect()) {
+    if (!wm.autoConnect())
+    {
         Serial.println("Failed to connect and hit timeout.");
         // Reset and try again, or maybe put it to deep sleep
         ESP.restart();
@@ -67,6 +71,7 @@ void setup() {
     digitalWrite(LED, LOW);
 }
 
-void loop() {
+void loop()
+{
     // Put your main code here, to run repeatedly:
 }

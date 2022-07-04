@@ -83,32 +83,8 @@ void buttonEvent()
 
 #if HA_INIT
         mode_HA.setState(AutoMode);
-// #else
-//         MODE_DASH.update(AutoMode);
-//         dashboard.sendUpdates();
 #endif
     }
-    //     if (modeButton.wasPressed() && ManualOff == false)
-    //     {
-    //         AutoMode = true;
-    // #if HA_INIT
-    //         mode_HA.setState(true);
-    // #else
-    //         MODE_DASH.update(AutoMode);
-    //         dashboard.sendUpdates();
-    // #endif
-    //     }
-    //     else if (modeButton.wasReleased())
-    //     {
-    //         AutoMode = false;
-    // #if HA_INIT
-    //         mode_HA.setState(false);
-
-    // #else
-    //         MODE_DASH.update(AutoMode);
-    //         dashboard.sendUpdates();
-    // #endif
-    //     }
 }
 
 void OneTimeRun()

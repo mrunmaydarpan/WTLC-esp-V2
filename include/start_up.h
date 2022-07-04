@@ -1,6 +1,8 @@
 void StartUp()
 {
+#if !OLED
     const char *compile_date = __DATE__;
+#endif
     debugln(F("Ready......."));
     debugln("SW: " + String(_VERSION));
     debugln("DT: " + String(compile_date));
@@ -12,6 +14,23 @@ void StartUp()
     debugln("Mode: " + String(EEPROM.read(AutoMode_mem)));
     debug(F("Starting."));
     pinMode(buzz, OUTPUT);
+
+    if (digitalRead(PB) == LOW)
+    {
+        wm.resetSettings();
+        display.clearDisplay();
+        display.setTextColor(WHITE);
+        display.setTextSize(2);
+        display.setFont(NULL);
+        display.setCursor(5, 17);
+        display.println("RESET WIFI");
+        display.setTextSize(1);
+        display.setCursor(5, 44);
+        display.print("WAIT FOR RESTART");
+        display.display();
+        delay(2000);
+        ESP.restart();
+    }
 #if OLED
     display.clearDisplay();
     delay(500);
