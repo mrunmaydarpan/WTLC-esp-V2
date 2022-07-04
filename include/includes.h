@@ -1,7 +1,6 @@
-#ifdef DryRun
-#define DryRunTime 120000
-#endif
+#include <setting.h>
 
+#define WM_ASYNC
 #if debugData
 #define debug(x) Serial.print(x)
 #define debugln(x) Serial.println(x)
@@ -35,10 +34,8 @@
 #endif
 #include <Smoothed.h>
 #include <pins.h>
-#if WM_SET
+#ifdef WM_SET
 #include <AsyncWiFiManager.h>
-#elif ESP_CON
-#include <ESPConnect.h>
 #endif
 
 #if SENSOR_1
@@ -68,6 +65,6 @@ byte mac[WL_MAC_ADDR_LENGTH];
 #endif
 // DNSServer dns;
 WiFiClient client;
-#if WM_SET
+#ifdef WM_SET
 AsyncWiFiManager wm;
 #endif

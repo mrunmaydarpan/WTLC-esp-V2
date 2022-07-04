@@ -1,6 +1,8 @@
 void StartUp()
 {
+#if !OLED
     const char *compile_date = __DATE__;
+#endif
     debugln(F("Ready......."));
     debugln("SW: " + String(_VERSION));
     debugln("DT: " + String(compile_date));
@@ -12,6 +14,23 @@ void StartUp()
     debugln("Mode: " + String(EEPROM.read(AutoMode_mem)));
     debug(F("Starting."));
     pinMode(buzz, OUTPUT);
+
+    if (digitalRead(PB) == LOW)
+    {
+        wm.resetSettings();
+        display.clearDisplay();
+        display.setTextColor(WHITE);
+        display.setTextSize(2);
+        display.setFont(NULL);
+        display.setCursor(5, 17);
+        display.println("RESET WIFI");
+        display.setTextSize(1);
+        display.setCursor(5, 44);
+        display.print("WAIT FOR RESTART");
+        display.display();
+        delay(2000);
+        ESP.restart();
+    }
 #if OLED
     display.clearDisplay();
     delay(500);
@@ -31,7 +50,7 @@ void StartUp()
     display.print("MODE:");
     display.setCursor(122, 32);
     display.print(STATOR_TYPE);
-    display.drawRect(0, 0, 128, 16, 1);
+    // display.drawRect(0, 0, 128, 16, 1);
     display.drawBitmap(4, 16, mdtronix_icon, 63, 48, 1);
     display.setCursor(79, 55);
     display.print("MDtronix");

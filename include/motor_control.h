@@ -35,7 +35,7 @@ void motor_on()
 #if Buzzer
     tone(buzz, 4500, 300);
 #endif
-
+    digitalWrite(led, HIGH);
 }
 
 void motor_off()

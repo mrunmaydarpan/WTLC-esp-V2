@@ -34,9 +34,43 @@ String processor(const String &var)
 }
 #endif
 
+void configModeCallback(AsyncWiFiManager *myAsyncWiFiManager)
+{
+    display.clearDisplay();
+    display.setTextColor(WHITE);
+    display.setTextSize(2);
+    display.setFont(NULL);
+    display.setCursor(5, 22);
+    display.println("SETUP WIFI");
+    display.display();
+    delay(2000);
+    debugln("Entered config mode");
+}
+
+void save_callback()
+{
+    display.clearDisplay();
+    display.setTextColor(WHITE);
+    display.setTextSize(2);
+    display.setFont(NULL);
+    display.setCursor(5, 23);
+    display.println("WIFI SAVED");
+    display.display();
+    delay(1000);
+    display.clearDisplay();
+    display.setTextColor(WHITE);
+    display.setTextSize(2);
+    display.setFont(NULL);
+    display.setCursor(5, 23);
+    display.println("REBOOTING");
+    display.display();
+    delay(1000);
+    ESP.restart();
+}
+
 void WIFI_CONNECT()
 {
-#if WM_SET || ESP_CON
+#ifdef WM_SET
 #if OLED
     display.clearDisplay();
     display.setTextColor(WHITE);
@@ -54,10 +88,11 @@ void WIFI_CONNECT()
     lcd.print("connecting WiFi");
 #endif
 #endif
-#if WM_SET
+#ifdef WM_SET
     WiFi.mode(WIFI_AP_STA);
-    // wm.resetSettings(); // wipe settings
     wm.setConfigPortalBlocking(false);
+    // wm.setAPCallback(configModeCallback);
+    wm.setSaveConfigCallback(save_callback);
     if (wm.autoConnect("MDtronix-WTLC-setup"))
     {
 #if OLED
@@ -65,13 +100,14 @@ void WIFI_CONNECT()
         display.setTextColor(WHITE);
         display.setTextSize(1);
         display.setFont(NULL);
-        display.setCursor(0, 16);
-        display.println("CONNECTED TO WIFI");
-        display.setCursor(0, 35);
-        display.setTextSize(1);
+        display.setCursor(5, 17);
+        display.println("CONNECTED TO");
+        display.setCursor(5, 30);
+        display.print(WiFi.SSID());
+        display.setCursor(5, 43);
         display.print(WiFi.localIP());
+        display.drawBitmap(90, 20, done_icon, 24, 24, 1);
         display.display();
-        delay(1000);
 #else
         lcd.clear();
         lcd.print("Connected");
@@ -79,36 +115,28 @@ void WIFI_CONNECT()
         lcd.print(WiFi.localIP());
         Serial.println("connected...yeey :)");
 #endif
-        delay(1000);
     }
     else
     {
         Serial.println("Configportal running");
-    }
-#if OLED
-#else
-    lcd.clear();
-#endif
-#elif ESP_CON
-    // ESPConnect.erase();  //in case to erase setting
-    ESPConnect.autoConnect("MDtronix-WTLC-setup");
-    if (ESPConnect.begin(&server))
-    {
-#if OLED
-#else
-        lcd.clear();
-        lcd.print("Connected");
-        lcd.setCursor(0, 1);
-        lcd.print(WiFi.localIP());
-#endif
-        Serial.println("Connected to WiFi");
-        Serial.println("IPAddress: " + WiFi.localIP().toString());
+        display.clearDisplay();
+        display.setTextColor(WHITE);
+        display.setTextSize(2);
+        display.setFont(NULL);
+        display.setCursor(0, 17);
+        display.println("WIFI NOT  CONNECTED");
+        display.display();
         delay(1000);
+        display.clearDisplay();
+        display.setTextColor(WHITE);
+        display.setTextSize(2);
+        display.setFont(NULL);
+        display.setCursor(5, 22);
+        display.println("SETUP WIFI");
+        display.display();
     }
-    else
-    {
-        Serial.println("Failed to connect to WiFi");
-    }
+    delay(1000);
+
 #if OLED
 #else
     lcd.clear();
@@ -121,8 +149,8 @@ void setting_code()
 #if AP_MODE
     WiFi.softAP("MDtronix-WTLC");
 #endif
-    server.onNotFound([](AsyncWebServerRequest *request)
-                      { 
+    server.on("/data", HTTP_GET, [](AsyncWebServerRequest *request)
+              { 
                           StaticJsonDocument<200> doc;
                           doc["level"] = value;
                           doc["pump"] = MotorState;
@@ -237,5 +265,4 @@ void set_device()
     mode_HA.setIcon("mdi:nintendo-switch");
     sensor_error_HA.setName(SensorError_name);
 }
-
 #endif
