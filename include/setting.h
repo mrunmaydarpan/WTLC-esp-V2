@@ -1,8 +1,3 @@
-#define _VERSION "2.2"
-#define _HARDWARE "9.0"
-
-const char brand[] = "MDtronix";
-
 /*------------sensor setting-----------------*/
 
 // #define SENSOR_1 true // sonar
@@ -12,15 +7,15 @@ const char brand[] = "MDtronix";
 /*------------wifi setting-------------------*/
 
 #define AP_MODE true // AP Mode
-#define WM_SET  // wifimanager
+// #define WM_SET  // (wifimanager) this turns off the wifi feature
 
 /*------------API setting--------------------*/
-
-#define HA_INIT false // if using with home assistant
+#if WM_SET
+#define HA_INIT false // if using with home assistant {turn on WM_SET to enable this feature}
 #if HA_INIT
 #define BROKER_ADDR IPAddress(192, 168, 1, 6) // home assistant IP
 #endif
-
+#endif
 /*-------------------------------------------*/
 
 #define SW_TEST true

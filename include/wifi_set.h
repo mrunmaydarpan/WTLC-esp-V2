@@ -33,7 +33,7 @@ String processor(const String &var)
     return String();
 }
 #endif
-
+#if WM_SET
 void configModeCallback(AsyncWiFiManager *myAsyncWiFiManager)
 {
     display.clearDisplay();
@@ -67,6 +67,7 @@ void save_callback()
     delay(1000);
     ESP.restart();
 }
+#endif
 
 void WIFI_CONNECT()
 {
@@ -149,7 +150,7 @@ void setting_code()
 #if AP_MODE
     WiFi.softAP("MDtronix-WTLC");
 #endif
-    server.on("/data", HTTP_GET, [](AsyncWebServerRequest *request)
+    server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
               { 
                           StaticJsonDocument<200> doc;
                           doc["level"] = value;

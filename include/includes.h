@@ -1,3 +1,4 @@
+#include <version.h>
 #include <setting.h>
 
 #define WM_ASYNC

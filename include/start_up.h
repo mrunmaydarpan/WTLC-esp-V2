@@ -14,7 +14,7 @@ void StartUp()
     debugln("Mode: " + String(EEPROM.read(AutoMode_mem)));
     debug(F("Starting."));
     pinMode(buzz, OUTPUT);
-
+#if WM_SET
     if (digitalRead(PB) == LOW)
     {
         wm.resetSettings();
@@ -31,6 +31,7 @@ void StartUp()
         delay(2000);
         ESP.restart();
     }
+#endif
 #if OLED
     display.clearDisplay();
     delay(500);
