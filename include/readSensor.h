@@ -31,20 +31,6 @@ void readSensor()
       }
 #endif
    }
-//    else
-//    {
-//       okCount++;
-//       if (okCount >= 100)
-//       {
-//          errorCount = 0;
-//          errorCountState = false;
-//          okCount = 0;
-//       }
-// #ifdef DryRun
-//       if (DryRunState == false)
-//          errorCountState = false;
-// #endif
-//    }
 #elif SENSOR_2
    do
    {

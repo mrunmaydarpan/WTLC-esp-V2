@@ -3,18 +3,20 @@ void StartUp()
 #if !OLED
     const char *compile_date = __DATE__;
 #endif
-    debugln(F("Ready......."));
-    debugln("SW: " + String(_VERSION));
-    debugln("DT: " + String(compile_date));
-    debugln("MaxDistance: " + String(MaxDistance));
-    debugln("MinDistance: " + String(MinDistance));
-    debugln("start at: " + String(MotorStartThreshold));
-    debugln("ManualOff: " + String(EEPROM.read(manualOff_mem)));
-    debugln("MotorState: " + String(EEPROM.read(motorState_mem)));
-    debugln("Mode: " + String(EEPROM.read(AutoMode_mem)));
-    debug(F("Starting."));
+    Serial.println(F("Ready......."));
+    Serial.println("SW: " + String(_VERSION));
+#if !OLED
+    Serial.println("DT: " + String(compile_date));
+#endif
+    Serial.println("MaxDistance: " + String(MaxDistance));
+    Serial.println("MinDistance: " + String(MinDistance));
+    Serial.println("start at: " + String(MotorStartThreshold));
+    Serial.println("ManualOff: " + String(EEPROM.read(manualOff_mem)));
+    Serial.println("MotorState: " + String(EEPROM.read(motorState_mem)));
+    Serial.println("Mode: " + String(EEPROM.read(AutoMode_mem)));
+    Serial.println(F("Starting."));
     pinMode(buzz, OUTPUT);
-#if WM_SET
+#ifdef WM_SET
     if (digitalRead(PB) == LOW)
     {
         wm.resetSettings();
@@ -93,7 +95,7 @@ void StartUp()
         delay(300);
     }
 #endif
-    debugln();
+    // debugln();
 #if !OLED
     delay(500);
     char showVersion[14];

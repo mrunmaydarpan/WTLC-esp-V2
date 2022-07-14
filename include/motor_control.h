@@ -63,19 +63,20 @@ void motor_off()
     digitalWrite(led, LOW);
 }
 
-#ifdef DryRun
 void DRY_RUN_CHECK()
 {
-    if (dryRun_LastDistance <= Distance)
+    if (DryRun)
     {
-        debugln("Dry run");
-        DryRunState = true;
-        errorCountState = true;
-    }
-    else if (dryRun_LastDistance > (Distance + 2))
-    {
-        debugln("all ok");
-        dryRun_LastDistance = Distance;
+        if (dryRun_LastDistance <= Distance)
+        {
+            debugln("Dry run");
+            DryRunState = true;
+            errorCountState = true;
+        }
+        else if (dryRun_LastDistance > (Distance + 2))
+        {
+            debugln("all ok");
+            dryRun_LastDistance = Distance;
+        }
     }
 }
-#endif

@@ -29,6 +29,10 @@ void ReadMem()
     {
         EEPROM.write(AutoMode_mem, 1);
     }
+    if (EEPROM.read(DryRun_mem) > 1)
+    {
+        EEPROM.write(DryRun_mem, 0);
+    }
     MotorStartThreshold = EEPROM.read(MotorStartThreshold_mem);
     ManualOff = EEPROM.read(manualOff_mem);
     MaxDistance = EEPROM.read(maxDistance_mem);
@@ -38,5 +42,6 @@ void ReadMem()
     dryRun_LastDistance = EEPROM.read(dryRun_LastDistance_mem);
     STATOR_TYPE = EEPROM.read(StatorType_mem);
     AutoMode = EEPROM.read(AutoMode_mem);
+    DryRun = EEPROM.read(DryRun_mem);
     EEPROM.commit();
 }

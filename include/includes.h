@@ -1,3 +1,4 @@
+#include <LittleFS.h>
 #include <version.h>
 #include <setting.h>
 
@@ -18,7 +19,6 @@
 #if HA_INIT
 #include <ArduinoHA.h>
 #else
-// #include <ESPDash.h>
 #endif
 #include <ESP8266mDNS.h>
 #include <JC_Button.h>
@@ -61,11 +61,26 @@ Smoothed<uint8_t> mySensor;
 AsyncWebServer server(80);
 #if HA_INIT
 byte mac[WL_MAC_ADDR_LENGTH];
-// #else
-// ESPDash dashboard(&server);
 #endif
 // DNSServer dns;
 WiFiClient client;
 #ifdef WM_SET
 AsyncWiFiManager wm;
+#if HA_INIT
+char BROKER_ADDR[40];
+AsyncWiFiManagerParameter custom_mqtt_server("server", "mqtt server", BROKER_ADDR, 40);
+#endif
+#endif
+
+#if debugdata
+#define debug(x) Serial.print(x)
+#define debugln(x) Serial.println(x)
+#endif
+
+#if SENSOR_1
+#define SENSOR_DISP 1
+#elif SENSOR_2
+#define SENSOR_DISP 2
+#elif SENSOR_3
+#define SENSOR_DISP 3
 #endif

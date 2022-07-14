@@ -33,7 +33,7 @@ String processor(const String &var)
     return String();
 }
 #endif
-#if WM_SET
+#ifdef WM_SET
 void configModeCallback(AsyncWiFiManager *myAsyncWiFiManager)
 {
     display.clearDisplay();
@@ -67,10 +67,36 @@ void save_callback()
     delay(1000);
     ESP.restart();
 }
+
+#if HA_INIT
+void saveParamsCallback()
+{
+    shouldSaveConfig = true;
+    StaticJsonDocument<200> doc;
+    doc["mqtt_server"] = custom_mqtt_server.getValue();
+    File configFile = LittleFS.open("/config.json", "w");
+    if (!configFile)
+    {
+        Serial.println("Failed to open config file for writing");
+    }
+    serializeJson(doc, configFile);
+    display.clearDisplay();
+    display.setTextColor(WHITE);
+    display.setTextSize(1);
+    display.setFont(NULL);
+    display.setCursor(5, 17);
+    display.println("SERVER:");
+    display.setCursor(5, 37);
+    display.print(custom_mqtt_server.getValue());
+    display.display();
+    delay(1000);
+}
+#endif
 #endif
 
 void WIFI_CONNECT()
 {
+
 #ifdef WM_SET
 #if OLED
     display.clearDisplay();
@@ -92,9 +118,13 @@ void WIFI_CONNECT()
 #ifdef WM_SET
     WiFi.mode(WIFI_AP_STA);
     wm.setConfigPortalBlocking(false);
-    // wm.setAPCallback(configModeCallback);
+#if HA_INIT
     wm.setSaveConfigCallback(save_callback);
-    if (wm.autoConnect("MDtronix-WTLC-setup"))
+    wm.setSaveParamsCallback(saveParamsCallback);
+    wm.addParameter(&custom_mqtt_server);
+#endif
+    // wm.setAPCallback(configModeCallback);
+    if (wm.autoConnect("MDtronix-WTLC")) // if Connected successfully
     {
 #if OLED
         display.clearDisplay();
@@ -109,17 +139,25 @@ void WIFI_CONNECT()
         display.print(WiFi.localIP());
         display.drawBitmap(90, 20, done_icon, 24, 24, 1);
         display.display();
+        delay(2000);
+        display.clearDisplay();
+        display.setTextColor(WHITE);
+        display.setTextSize(1);
+        display.setFont(NULL);
+        display.setCursor(5, 17);
+        display.println("SERVER:");
+        display.setCursor(5, 37);
+        display.print(BROKER_ADDR);
+        display.display();
 #else
         lcd.clear();
         lcd.print("Connected");
         lcd.setCursor(0, 1);
         lcd.print(WiFi.localIP());
-        Serial.println("connected...yeey :)");
 #endif
     }
     else
-    {
-        Serial.println("Configportal running");
+    { // if not connected
         display.clearDisplay();
         display.setTextColor(WHITE);
         display.setTextSize(2);
@@ -142,14 +180,13 @@ void WIFI_CONNECT()
 #else
     lcd.clear();
 #endif
+#else
+    WiFi.softAP("MDtronix-WTLC");
 #endif
 }
 
 void setting_code()
 {
-#if AP_MODE
-    WiFi.softAP("MDtronix-WTLC");
-#endif
     server.on("/", HTTP_GET, [](AsyncWebServerRequest *request)
               { 
                           StaticJsonDocument<200> doc;
@@ -211,12 +248,12 @@ void setting_code()
                           request->send(200, "text/plain", reply);
                        }
                   }
-                  else if(request->hasParam("pump"))
+                  else if(request->hasParam("pump")) //control pump from app
                   {
                       MotorState = request->getParam("pump")->value().toInt();
                       request->send(203,"text/plain","ok");
-                  } 
-                  else if(request->hasParam("mode"))
+                  }
+                  else if(request->hasParam("mode")) //change mode from app
                   {
                       AutoMode = request->getParam("mode")->value().toInt();
                       request->send(204,"text/plain","ok");
@@ -230,13 +267,13 @@ void setting_code()
     // dns.start(DNS_PORT, "*", IPAddress(WiFi.localIP()));
     if (!MDNS.begin("mdtronix-wtlc"))
     {
-        Serial.println("Error setting up MDNS responder!");
+        debugln("Error setting up MDNS responder!");
         while (1)
         {
             delay(1000);
         }
     }
-    Serial.println("mDNS responder started");
+    debugln("mDNS responder started");
     AsyncElegantOTA.begin(&server); // Start ElegantOTA
     server.begin();
     MDNS.addService("http", "tcp", 80);
@@ -265,5 +302,9 @@ void set_device()
     mode_HA.setName(mode_name);
     mode_HA.setIcon("mdi:nintendo-switch");
     sensor_error_HA.setName(SensorError_name);
+
+    IPAddress HA_IP;
+    HA_IP.fromString(BROKER_ADDR);
+    mqtt_HA.begin(HA_IP, BROKER_USER, BROKER_PASS);
 }
 #endif

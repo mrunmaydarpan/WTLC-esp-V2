@@ -64,10 +64,6 @@ void buttonEvent()
             EEPROM.commit();
         }
     }
-    else if (button.pressedFor(10000))
-    {
-        ESP.restart();
-    }
 
     /*-----------------------MODE BUTTON OPERATION------------------------*/
     if (modeButton.wasPressed())
@@ -94,24 +90,23 @@ void OneTimeRun()
         if (MotorState == true)
         {
             motor_on();
-#ifdef DryRun
-            dryRun_LastDistance = Distance;
-            EEPROM.write(dryRun_LastDistance_mem, dryRun_LastDistance);
-            dryRun_timer = t.every(DryRunTime, DRY_RUN_CHECK);
-#endif
+            if (DryRun)
+            {
+                dryRun_LastDistance = Distance;
+                EEPROM.write(dryRun_LastDistance_mem, dryRun_LastDistance);
+                dryRun_timer = t.every(DryRunTime, DRY_RUN_CHECK);
+            }
         }
         else
         {
             motor_off();
-#ifdef DryRun
-            t.stop(dryRun_timer);
-#endif
+            if (DryRun)
+            {
+                t.stop(dryRun_timer);
+            }
         }
 #if HA_INIT
         pump_HA.setState(MotorState);
-// #else
-//         PUMP_DASH.update(MotorState);
-//         dashboard.sendUpdates();
 #endif
         debugln("MotorState Changed");
     }
@@ -189,13 +184,7 @@ void update_lcd()
     display.setTextSize(1);
     display.setCursor(4, 4);
     display.print(AutoMode ? "AUTO" : "MANUAL");
-    // display.drawRect(0, 0, 128, 16, 1);
-    // display.drawLine(43, 0, 43, 15, 1);
-    // display.drawLine(72, 0, 72, 15, 1);
-    // display.setCursor(50, 4);
-    // display.setTextSize(1);
-    // display.print(MotorState ? "ON" : "OFF");
-    if (MQTT)
+    if (mqtt_HA.isConnected())
         display.drawBitmap(112, 2, network_icon, 12, 12, 1);
     display.display();
 #else
