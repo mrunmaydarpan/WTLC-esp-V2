@@ -1,3 +1,4 @@
+#if HA_INIT
 bool loadConfig()
 {
     File configFile = LittleFS.open("/config.json", "r");
@@ -31,3 +32,4 @@ bool loadConfig()
     Serial.println(BROKER_ADDR);
     return true;
 }
+#endif

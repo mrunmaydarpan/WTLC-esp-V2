@@ -13,6 +13,10 @@ void PumpOFF_command()
 
 void motor_on()
 {
+#if Buzzer
+    tone(buzz, 4500, 300);
+#endif
+    digitalWrite(led, HIGH);
     switch (STATOR_TYPE)
     {
     case 1: // Normal Mode
@@ -32,14 +36,14 @@ void motor_on()
         //     digitalWrite(Relay_ON, LOW);
         //     break;
     };
-#if Buzzer
-    tone(buzz, 4500, 300);
-#endif
-    digitalWrite(led, HIGH);
 }
 
 void motor_off()
 {
+#if Buzzer
+    tone(buzz, 4500, 500);
+#endif
+    digitalWrite(led, LOW);
     switch (STATOR_TYPE)
     {
     case 1: // Normal Mode
@@ -56,11 +60,6 @@ void motor_off()
         //     digitalWrite(Relay_OFF, LOW);
         //     break;
     }
-
-#if Buzzer
-    tone(buzz, 4500, 500);
-#endif
-    digitalWrite(led, LOW);
 }
 
 void DRY_RUN_CHECK()

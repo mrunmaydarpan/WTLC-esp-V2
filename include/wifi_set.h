@@ -3,36 +3,6 @@ const char *max_ = "max";
 const char *thres_ = "threshold";
 const char *stator_ = "stator";
 
-#ifdef web_setting
-String processor(const String &var)
-{
-    if (var == "setmin")
-    {
-        String sendValue = "";
-        sendValue += "<input type=\"number\" name=\"min\" maxlength=\"2\" value=" + String(MinDistance) + " > ";
-        return sendValue;
-    }
-    if (var == "setmax")
-    {
-        String sendValue = "";
-        sendValue += "<input type=\"number\" name=\"max\" maxlength=\"3\" value=" + String(MaxDistance) + "> ";
-        return sendValue;
-    }
-    if (var == "setthreshold")
-    {
-        String sendValue = "";
-        sendValue += "<input type=\"number\" name=\"threshold\" maxlength=\"2\" value=" + String(MotorStartThreshold) + "> ";
-        return sendValue;
-    }
-    if (var == "setstator")
-    {
-        String sendValue = "";
-        sendValue += "<input type=\"number\" name=\"stator\" maxlength=\"1\" value=" + String(STATOR_TYPE) + " > ";
-        return sendValue;
-    }
-    return String();
-}
-#endif
 #ifdef WM_SET
 void configModeCallback(AsyncWiFiManager *myAsyncWiFiManager)
 {
@@ -71,7 +41,6 @@ void save_callback()
 #if HA_INIT
 void saveParamsCallback()
 {
-    shouldSaveConfig = true;
     StaticJsonDocument<200> doc;
     doc["mqtt_server"] = custom_mqtt_server.getValue();
     File configFile = LittleFS.open("/config.json", "w");
@@ -96,7 +65,7 @@ void saveParamsCallback()
 
 void WIFI_CONNECT()
 {
-
+    // wm.resetSettings();
 #ifdef WM_SET
 #if OLED
     display.clearDisplay();
@@ -140,6 +109,7 @@ void WIFI_CONNECT()
         display.drawBitmap(90, 20, done_icon, 24, 24, 1);
         display.display();
         delay(2000);
+#if HA_INIT
         display.clearDisplay();
         display.setTextColor(WHITE);
         display.setTextSize(1);
@@ -149,6 +119,7 @@ void WIFI_CONNECT()
         display.setCursor(5, 37);
         display.print(BROKER_ADDR);
         display.display();
+#endif
 #else
         lcd.clear();
         lcd.print("Connected");

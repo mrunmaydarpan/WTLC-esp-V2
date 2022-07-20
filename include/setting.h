@@ -6,19 +6,18 @@
 
 /*------------wifi setting-------------------*/
 
-#define WM_SET // (wifimanager) this turns on/off the wifi feature
+// #define WM_SET // (wifimanager) this turns on/off the wifi feature
 
 /*------------API setting--------------------*/
 #ifdef WM_SET
-#define HA_INIT true // if using with home assistant {turn on WM_SET to enable this feature}
+#define HA_INIT false // if using with home assistant {turn on WM_SET to enable this feature}
 #endif
 /*-------------------------------------------*/
 
-#define SW_TEST true
+#define SW_TEST false
 #define OLED true // use OLED display
 #define debugData false
 #define Buzzer true
-// #define web_setting //use this to control without phone
 
 #define on_delay 500
 #define off_delay 1000

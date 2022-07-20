@@ -52,19 +52,19 @@ void readSensor()
             Distance /= 10;
             mySensor.add(Distance);
             DistanceX = mySensor.get();
-            if (Distance <= MaxDistance && Distance >= MinDistance)
-            {
-               value = map(DistanceX, MinDistance, MaxDistance, 100, 0);
-               // value = valueX;
-            }
-            else if (DistanceX >= MaxDistance)
-            {
-               value = 0;
-            }
-            else if (DistanceX <= MinDistance)
-            {
-               value = 100;
-            }
+            // if (Distance <= MaxDistance && Distance >= MinDistance)  //commented out to test >100%
+            // {
+            value = map(DistanceX, MinDistance, MaxDistance, 100, 0);
+            // value = valueX;
+            // }
+            // else if (DistanceX >= MaxDistance)
+            // {
+            //    value = 0;
+            // }
+            // else if (DistanceX <= MinDistance)
+            // {
+            //    // value = 100;
+            // }
             errorCount = 0;
             if (DryRunState == false)
                errorCountState = false;
@@ -140,7 +140,7 @@ void readSensor()
    }
    else if (value > 100)
    {
-      value = 100;
+      // value = 100;  //display more than 100%
    }
    if (value <= MotorStartThreshold && ManualOff == false && AutoMode == true && Distance != 0)
    {

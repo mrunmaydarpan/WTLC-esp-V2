@@ -184,8 +184,10 @@ void update_lcd()
     display.setTextSize(1);
     display.setCursor(4, 4);
     display.print(AutoMode ? "AUTO" : "MANUAL");
+#if HA_INIT
     if (mqtt_HA.isConnected())
         display.drawBitmap(112, 2, network_icon, 12, 12, 1);
+#endif
     display.display();
 #else
     if (errorCountState == false)

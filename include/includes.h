@@ -72,11 +72,6 @@ AsyncWiFiManagerParameter custom_mqtt_server("server", "mqtt server", BROKER_ADD
 #endif
 #endif
 
-#if debugdata
-#define debug(x) Serial.print(x)
-#define debugln(x) Serial.println(x)
-#endif
-
 #if SENSOR_1
 #define SENSOR_DISP 1
 #elif SENSOR_2
